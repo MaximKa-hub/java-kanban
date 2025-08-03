@@ -1,3 +1,8 @@
+package service;
+
+import model.Epic;
+import model.Subtask;
+import model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +14,10 @@ public class TasksManager {
     private HashMap<Integer, Task> tasks = new HashMap<>();
     private HashMap<Integer, Epic> epics = new HashMap<>();
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+
+    public static TasksManager getTasks() {
+        return new TasksManager();
+    }
 
 
     public ArrayList<Task> getAllTasks() {
@@ -149,15 +158,15 @@ public class TasksManager {
                 countDone++;
             } else if (subtaskStatus == TaskStatus.NEW) {
                 countNew++;
+            } else if (subtaskStatus == TaskStatus.IN_PROGRESS) {
+                epic.setStatus(TaskStatus.IN_PROGRESS);
+                return;
             }
         }
-
         if (countDone == epic.getSubtaskIds().size()) {
             epic.setStatus(TaskStatus.DONE);
         } else if (countNew == epic.getSubtaskIds().size()) {
             epic.setStatus(TaskStatus.NEW);
-        } else {
-            epic.setStatus(TaskStatus.IN_PROGRESS);
         }
     }
 }
